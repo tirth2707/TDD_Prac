@@ -9,10 +9,14 @@ class StringCalculator {
       const customDelimiter = parts[0].match(/\[(.+?)\]/g);
       if (customDelimiter) {
         delimiter = new RegExp(
-          customDelimiter.map((d) => d.slice(1, -1)).join("|")
+          customDelimiter
+            .map((d) => d.slice(1, -1).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")) // Escape special characters
+            .join("|")
         );
       } else {
-        delimiter = new RegExp(parts[0][2]);
+        delimiter = new RegExp(
+          parts[0][2].replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+        ); // Escape special characters
       }
       numbers = parts[1];
     }
@@ -31,4 +35,5 @@ class StringCalculator {
   }
 }
 
+// Export the class for testing
 module.exports = StringCalculator;
